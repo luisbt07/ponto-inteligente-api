@@ -38,17 +38,9 @@ public class Funcionario implements Serializable {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     @Column(name = "nome", nullable = false)
     public String getNome() {
         return nome;
-    }
-
-    public void setNome(String nome) {
-        this.nome = nome;
     }
 
     @Column(name = "email", nullable = false)
@@ -56,17 +48,9 @@ public class Funcionario implements Serializable {
         return email;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
     @Column(name = "cpf", nullable = false)
     public String getCpf() {
         return cpf;
-    }
-
-    public void setCpf(String cpf) {
-        this.cpf = cpf;
     }
 
     @Column(name = "valor_hora", nullable = true)
@@ -74,27 +58,9 @@ public class Funcionario implements Serializable {
         return valorHora;
     }
 
-    @Transient
-    public Optional<BigDecimal> getValorHoraOpt() {
-        return Optional.ofNullable(valorHora);
-    }
-
-    public void setValorHora(BigDecimal valorHora) {
-        this.valorHora = valorHora;
-    }
-
     @Column(name = "qtd_horas_trabalho_dia", nullable = true)
     public Float getQtdHorasTrabalhoDia() {
         return qtdHorasTrabalhoDia;
-    }
-
-    @Transient
-    public Optional<Float> getQtdHorasTrabalhoDiaOpt() {
-        return Optional.ofNullable(qtdHorasTrabalhoDia);
-    }
-
-    public void setQtdHorasTrabalhoDia(Float qtdHorasTrabalhoDia) {
-        this.qtdHorasTrabalhoDia = qtdHorasTrabalhoDia;
     }
 
     @Column(name = "qtd_horas_almoco", nullable = true)
@@ -102,23 +68,10 @@ public class Funcionario implements Serializable {
         return qtdHorasAlmoco;
     }
 
-    @Transient
-    public Optional<Float> getQtdHorasAlmocoOpt() {
-        return Optional.ofNullable(qtdHorasAlmoco);
-    }
-
-    public void setQtdHorasAlmoco(Float qtdHorasAlmoco) {
-        this.qtdHorasAlmoco = qtdHorasAlmoco;
-    }
-
-    @Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)//para aparecer ROLE_ADMIN ou ROLE_USER e não 0 e 1
     @Column(name = "perfil", nullable = false)
     public PerfilEnum getPerfil() {
         return perfil;
-    }
-
-    public void setPerfil(PerfilEnum perfil) {
-        this.perfil = perfil;
     }
 
     @Column(name = "data_criacao", nullable = false)
@@ -126,17 +79,9 @@ public class Funcionario implements Serializable {
         return dataCriacao;
     }
 
-    public void setDataCriacao(Date dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
     @Column(name = "data_atualizacao", nullable = false)
     public Date getDataAtualizacao() {
         return dataAtualizacao;
-    }
-
-    public void setDataAtualizacao(Date dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
     }
 
     @Column(name = "senha", nullable = false)
@@ -144,22 +89,77 @@ public class Funcionario implements Serializable {
         return senha;
     }
 
-    public void setSenha(String senha) {
-        this.senha = senha;
+    @OneToMany(mappedBy = "funcionario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)//Funcionario contem muitos lancamentos
+    public List<Lancamento> getLancamentos() {
+        return lancamentos;
     }
 
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)//Tipo eager sempre que eu carregar um funcionário eu quero os dados da empresa
     public Empresa getEmpresa() {
         return empresa;
     }
 
-    public void setEmpresa(Empresa empresa) {
-        this.empresa = empresa;
+    @Transient //JPA deve ignorar esse método esse método não está relacionado com a implementação do mapeamento  com o banco de dados
+    public Optional<BigDecimal> getValorHoraOpt() {
+        return Optional.ofNullable(valorHora);
     }
 
-    @OneToMany(mappedBy = "funcionario", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public List<Lancamento> getLancamentos() {
-        return lancamentos;
+    @Transient
+    public Optional<Float> getQtdHorasTrabalhoDiaOpt() {
+        return Optional.ofNullable(qtdHorasTrabalhoDia);
+    }
+
+    @Transient
+    public Optional<Float> getQtdHorasAlmocoOpt() {
+        return Optional.ofNullable(qtdHorasAlmoco);
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public void setCpf(String cpf) {
+        this.cpf = cpf;
+    }
+
+    public void setValorHora(BigDecimal valorHora) {
+        this.valorHora = valorHora;
+    }
+
+    public void setQtdHorasTrabalhoDia(Float qtdHorasTrabalhoDia) {
+        this.qtdHorasTrabalhoDia = qtdHorasTrabalhoDia;
+    }
+
+    public void setQtdHorasAlmoco(Float qtdHorasAlmoco) {
+        this.qtdHorasAlmoco = qtdHorasAlmoco;
+    }
+
+    public void setPerfil(PerfilEnum perfil) {
+        this.perfil = perfil;
+    }
+
+    public void setDataCriacao(Date dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public void setDataAtualizacao(Date dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
     }
 
     public void setLancamentos(List<Lancamento> lancamentos) {
@@ -180,10 +180,18 @@ public class Funcionario implements Serializable {
 
     @Override
     public String toString() {
-        return "Funcionario [id=" + id + ", nome=" + nome + ", email=" + email + ", senha=" + senha + ", cpf=" + cpf
-                + ", valorHora=" + valorHora + ", qtdHorasTrabalhoDia=" + qtdHorasTrabalhoDia + ", qtdHorasAlmoco="
-                + qtdHorasAlmoco + ", perfil=" + perfil + ", dataCriacao="
-                + dataCriacao + ", dataAtualizacao=" + dataAtualizacao + ", empresa=" + empresa + "]";
+        return "Funcionario [id=" + id +
+                ", nome=" + nome +
+                ", email=" + email +
+                ", senha=" + senha +
+                ", cpf=" + cpf +
+                ", valorHora=" + valorHora +
+                ", qtdHorasTrabalhoDia=" + qtdHorasTrabalhoDia +
+                ", qtdHorasAlmoco=" + qtdHorasAlmoco +
+                ", perfil=" + perfil +
+                ", dataCriacao=" + dataCriacao +
+                ", dataAtualizacao=" + dataAtualizacao +
+                ", empresa=" + empresa + "]";
     }
 
 }

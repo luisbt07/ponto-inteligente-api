@@ -58,13 +58,34 @@ public class Empresa implements Serializable {
         return dataAtualizacao;
     }
 
-    @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    public List<Funcionario> getFuncionarios() {
+    @OneToMany(mappedBy = "empresa", fetch = FetchType.LAZY, cascade = CascadeType.ALL)//FETCHTYPE.LAZY para não carregar todos os funcionários automaticamente
+    public List<Funcionario> getFuncionarios() {                                       //CASCADETYPE.ALL para excluir ou executar todas as operações en funcionários que são dependetes de uma empresa
         return funcionarios;
+    }
+
+    @PreUpdate//Atualizar automaticamente as datas de criação e atualização
+    public void preUpdate() {
+        dataAtualizacao = new Date();
+    }
+
+    @PrePersist
+    public void prePersist() {
+        final Date atual = new Date();
+        dataCriacao = atual;
+        dataAtualizacao = atual;
     }
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    @Override
+    public String toString() {
+        return "Empresa [id=" + id +
+                ", razaoSocial=" + razaoSocial +
+                ", cnpj=" + cnpj +
+                ", dataCriacao=" + dataCriacao +
+                ", dataAtualizacao=" + dataAtualizacao + "]";
     }
 
     public void setRazaoSocial(String razaoSocial) {
@@ -85,26 +106,5 @@ public class Empresa implements Serializable {
 
     public void setFuncionarios(List<Funcionario> funcionarios) {
         this.funcionarios = funcionarios;
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        dataAtualizacao = new Date();
-    }
-
-    @PrePersist
-    public void prePersist() {
-        final Date atual = new Date();
-        dataCriacao = atual;
-        dataAtualizacao = atual;
-    }
-
-    @Override
-    public String toString() {
-        return "Empresa [id=" + id +
-                ", razaoSocial=" + razaoSocial +
-                ", cnpj=" + cnpj +
-                ", dataCriacao=" + dataCriacao +
-                ", dataAtualizacao=" + dataAtualizacao + "]";
     }
 }

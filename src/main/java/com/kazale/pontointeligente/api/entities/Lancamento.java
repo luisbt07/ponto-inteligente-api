@@ -35,27 +35,16 @@ public class Lancamento implements Serializable {
     private TipoEnum tipo;
     private Funcionario funcionario;
 
-    public Lancamento() {
-    }
-
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     public Long getId() {
         return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    @Temporal(TemporalType.TIMESTAMP)
+    @Temporal(TemporalType.TIMESTAMP)//data e a hora em que ocorrer o lancamento
     @Column(name = "data", nullable = false)
     public Date getData() {
         return data;
-    }
-
-    public void setData(Date data) {
-        this.data = data;
     }
 
     @Column(name = "descricao", nullable = true)
@@ -63,17 +52,9 @@ public class Lancamento implements Serializable {
         return descricao;
     }
 
-    public void setDescricao(String descricao) {
-        this.descricao = descricao;
-    }
-
     @Column(name = "localizacao", nullable = true)
     public String getLocalizacao() {
         return localizacao;
-    }
-
-    public void setLocalizacao(String localizacao) {
-        this.localizacao = localizacao;
     }
 
     @Column(name = "data_criacao", nullable = false)
@@ -81,17 +62,9 @@ public class Lancamento implements Serializable {
         return dataCriacao;
     }
 
-    public void setDataCriacao(Date dataCriacao) {
-        this.dataCriacao = dataCriacao;
-    }
-
     @Column(name = "data_atualizacao", nullable = false)
     public Date getDataAtualizacao() {
         return dataAtualizacao;
-    }
-
-    public void setDataAtualizacao(Date dataAtualizacao) {
-        this.dataAtualizacao = dataAtualizacao;
     }
 
     @Enumerated(EnumType.STRING)
@@ -100,13 +73,40 @@ public class Lancamento implements Serializable {
         return tipo;
     }
 
-    public void setTipo(TipoEnum tipo) {
-        this.tipo = tipo;
-    }
-
-    @ManyToOne(fetch = FetchType.EAGER)
+    @ManyToOne(fetch = FetchType.EAGER)//Para trazer o funcionário que eu fizer um lancamento
     public Funcionario getFuncionario() {
         return funcionario;
+    }
+
+    public Lancamento() {
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public void setData(Date data) {
+        this.data = data;
+    }
+
+    public void setDescricao(String descricao) {
+        this.descricao = descricao;
+    }
+
+    public void setLocalizacao(String localizacao) {
+        this.localizacao = localizacao;
+    }
+
+    public void setDataCriacao(Date dataCriacao) {
+        this.dataCriacao = dataCriacao;
+    }
+
+    public void setDataAtualizacao(Date dataAtualizacao) {
+        this.dataAtualizacao = dataAtualizacao;
+    }
+
+    public void setTipo(TipoEnum tipo) {
+        this.tipo = tipo;
     }
 
     public void setFuncionario(Funcionario funcionario) {
